@@ -30,6 +30,7 @@ int getNodeDepth(BinarySearchTree<Key, Value> const & tree, Node<Key, Value> * r
         }
 
         ++dist;
+
         node = node->getParent();
 
         if(dist > PPBST_MAX_HEIGHT)

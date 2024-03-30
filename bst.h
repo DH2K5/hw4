@@ -504,105 +504,6 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &key
 * Recall: The writeup specifies that if a node has 2 children you
 * should swap with the predecessor and then remove.
 */
-/*
-template<typename Key, typename Value>
-void BinarySearchTree<Key, Value>::remove(const Key& key)
-{
-    // check exist (if not return), two children - swap, relink parent and child.
-    // TODO
-    Node<Key, Value>* curr = root_;
-    if(root_ == nullptr){
-        return;
-    }
-    while(curr != nullptr){
-        if(key == (curr->getKey())){
-            if(((curr->getLeft()) == nullptr) && ((curr->getRight()) == nullptr)){
-                if((curr->getParent()) == nullptr){}
-                else if(((curr->getParent())->getRight()) == curr){
-                    (curr->getParent())->setRight(nullptr);
-                }
-                else if(((curr->getParent())->getLeft()) == curr){
-                    (curr->getParent())->setLeft(nullptr);
-                }
-            }
-            else if(((curr->getLeft()) != nullptr) && ((curr->getRight()) == nullptr)){
-                if((curr->getParent()) == nullptr){
-                    root_ = curr->getLeft();
-                }
-                else if(((curr->getParent())->getRight()) == curr){
-                    (curr->getParent())->setRight(curr->getLeft());
-                    (curr->getLeft())->setParent(curr->getParent());
-                }
-                else if(((curr->getParent())->getLeft()) == curr){
-                    (curr->getParent())->setLeft(curr->getLeft());
-                    (curr->getLeft())->setParent(curr->getParent());
-                }
-            }
-            else if(((curr->getLeft()) == nullptr) && ((curr->getRight()) != nullptr)){
-                if((curr->getParent()) == nullptr){
-                    root_ = curr->getRight();
-                }
-                else if(((curr->getParent())->getRight()) == curr){
-                    (curr->getParent())->setRight(curr->getRight());
-                    (curr->getRight())->setParent(curr->getParent());
-                }
-                else if(((curr->getParent())->getLeft()) == curr){
-                    (curr->getParent())->setLeft(curr->getRight());
-                    (curr->getRight())->setParent(curr->getParent());
-                }
-            }
-            else{
-                nodeSwap(curr, predecessor(curr));
-                if(((curr->getLeft()) == nullptr) && ((curr->getRight()) == nullptr)){
-                    if((curr->getParent()) == nullptr){}
-                    else if(((curr->getParent())->getRight()) == curr){
-                        (curr->getParent())->setRight(nullptr);
-                    }
-                    else if(((curr->getParent())->getLeft()) == curr){
-                        (curr->getParent())->setLeft(nullptr);
-                    }
-                }
-                else if(((curr->getLeft()) != nullptr) && ((curr->getRight()) == nullptr)){
-                    if((curr->getParent()) == nullptr){
-                        root_ = curr->getLeft();
-                    }
-                    else if(((curr->getParent())->getRight()) == curr){
-                        (curr->getParent())->setRight(curr->getLeft());
-                        (curr->getLeft())->setParent(curr->getParent());
-                    }
-                    else if(((curr->getParent())->getLeft()) == curr){
-                        (curr->getParent())->setLeft(curr->getLeft());
-                        (curr->getLeft())->setParent(curr->getParent());
-                    }
-                }
-                else if(((curr->getLeft()) == nullptr) && ((curr->getRight()) != nullptr)){
-                    if((curr->getParent()) == nullptr){
-                        root_ = curr->getRight();
-                    }
-                    else if(((curr->getParent())->getRight()) == curr){
-                        (curr->getParent())->setRight(curr->getRight());
-                        (curr->getRight())->setParent(curr->getParent());
-                    }
-                    else if(((curr->getParent())->getLeft()) == curr){
-                        (curr->getParent())->setLeft(curr->getRight());
-                        (curr->getRight())->setParent(curr->getParent());
-                    }
-                }
-            }
-            delete curr;
-            curr = nullptr;
-            return;
-        }
-        if(key < (curr->getKey())){
-            curr = curr->getLeft();
-        }
-        if(key > (curr->getKey())){
-            curr = curr->getRight();
-        }
-    }
-}
-*/
-
 template<typename Key, typename Value>
 void BinarySearchTree<Key, Value>::remove(const Key& key)
 {
@@ -656,11 +557,11 @@ BinarySearchTree<Key, Value>::predecessor(Node<Key, Value>* current)
         return nullptr;
     }
     Node<Key, Value>* curr = (current->getLeft());
-    Node<Key, Value>* prev = (current->getRight());
+    Node<Key, Value>* prev = (current->getParent());
     if(curr == nullptr){
+        curr = prev;
         while(prev != nullptr){
-            curr = nullptr;
-            if(((prev->getRight()) != nullptr) && (curr == (prev->getRight()))){
+            if(curr == (prev->getRight())){
                 return prev;
             }
             curr = prev;
@@ -687,9 +588,9 @@ BinarySearchTree<Key, Value>::successor(Node<Key, Value>* current)
     Node<Key, Value>* curr = (current->getRight());
     Node<Key, Value>* prev = (current->getParent());
     if(curr == nullptr){
+        curr = prev;
         while(prev != nullptr){
-            curr = nullptr;
-            if(((prev->getLeft()) != nullptr) && (curr == (prev->getLeft()))){
+            if(curr == (prev->getLeft())){
                 return prev;
             }
             curr = prev;
