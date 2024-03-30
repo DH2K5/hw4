@@ -362,18 +362,14 @@ void AVLTree<Key, Value>:: remove(const Key& key)
         else{
              next->setLeft(nullptr);
         }
-        next->setBalance(maxHeight(next->getRight()) - maxHeight(next->getLeft()));
         delete curr;
         curr = next;
         while(curr != nullptr){
             curr->setBalance(maxHeight(curr->getRight()) - maxHeight(curr->getLeft()));
             if(((curr->getBalance()) < -1) || ((curr->getBalance()) > 1)){
                 insertFix(curr);
-                curr = next;
             }
-            else{
-                curr = predecessor(curr);
-            }
+            curr = (curr->getParent());
         }
         return;
     }
@@ -386,9 +382,6 @@ void AVLTree<Key, Value>:: remove(const Key& key)
         next = curr->getRight();
         nodeSwap(next, curr);
         next->setRight(nullptr);
-    }
-    if((next->getParent()) == nullptr){
-        (this->root_) = next;
     }
     delete curr;
     curr = next;
